@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.valid.pokeapp.R
 import com.valid.pokeapp.adapters.PokedexAdapter
 import com.valid.pokeapp.viewmodel.PokemonViewModel
@@ -17,6 +18,9 @@ class PokedexFragment : Fragment() {
 
     private lateinit var pokedexAdapter: PokedexAdapter
     private lateinit var viewModel: PokemonViewModel
+
+    var aptoParaCargar = true
+    var offset = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,11 +37,30 @@ class PokedexFragment : Fragment() {
         pokedexAdapter = PokedexAdapter(this.context!!)
         recyclerView.adapter = pokedexAdapter
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = GridLayoutManager(this.context!!, 3)
+        val layoutManager = GridLayoutManager(this.context!!, 3)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy>0) {
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
 
-        viewModel.fetchPokemonList()
+                    if (aptoParaCargar) {
+                        if ((visibleItemCount+pastVisibleItems)>=totalItemCount) {
+                            aptoParaCargar = false
+                            viewModel.fetchPokemonList(++offset)
+                        }
+                    }
+                }
+            }
+        })
+
+        viewModel.fetchPokemonList(offset)
         viewModel.pokemonList?.observe(this, Observer {
             pokedexAdapter.setPokemonList(it)
+            aptoParaCargar = true
         })
     }
 

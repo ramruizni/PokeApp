@@ -1,8 +1,6 @@
 package com.valid.pokeapp.adapters
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +11,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.valid.pokeapp.R
 import com.valid.pokeapp.viewmodel.persistence.Pokemon
 
-class PokedexAdapter internal constructor(context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
+class PokedexAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
 
     private var layoutInflater = LayoutInflater.from(context)
     private var pokemonList = emptyList<Pokemon>()
-    private val context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val itemView = layoutInflater.inflate(R.layout.item_pokemon, parent, false)

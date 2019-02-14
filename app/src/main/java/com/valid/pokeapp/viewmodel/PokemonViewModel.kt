@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.valid.pokeapp.utils.ViewModelUtils.formatName
 import com.valid.pokeapp.utils.ViewModelUtils.getPokemonNumberFromUrl
 import com.valid.pokeapp.viewmodel.persistence.Pokemon
 import com.valid.pokeapp.viewmodel.persistence.PokemonDao
@@ -29,11 +30,10 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     init {
         pokemonDao = pokemonDB!!.pokemonDao()
         pokemonList = pokemonDao!!.getAllPokemon()
-        //pokemonList = MutableLiveData()
     }
 
-    fun fetchPokemonList() {
-        disposable = pokeApi.getPokemonList(151, 0)
+    fun fetchPokemonList(offset: Int) {
+        disposable = pokeApi.getPokemonList(151, offset*151)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::onFetchSuccess, this::onFetchError)
@@ -55,7 +55,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     fun insertPokemonInDB(pokemon: Pokemon) {
         Observable.fromCallable {
             with(pokemonDao) {
-                this?.insert(Pokemon(getPokemonNumberFromUrl(pokemon.url), pokemon.name, pokemon.url))
+                this?.insert(Pokemon(getPokemonNumberFromUrl(pokemon.url), formatName(pokemon.name), pokemon.url))
             }
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
