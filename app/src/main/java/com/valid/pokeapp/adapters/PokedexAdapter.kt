@@ -10,11 +10,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.valid.pokeapp.R
 import com.valid.pokeapp.viewmodel.persistence.Pokemon
+import io.reactivex.subjects.PublishSubject
 
 class PokedexAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
 
     private var layoutInflater = LayoutInflater.from(context)
     private var pokemonList = emptyList<Pokemon>()
+    public val onClickSubject = PublishSubject.create<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val itemView = layoutInflater.inflate(R.layout.item_pokemon, parent, false)
@@ -23,6 +25,9 @@ class PokedexAdapter internal constructor(private val context: Context) : Recycl
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         holder.setData(pokemonList.get(position), context)
+        holder.itemView.setOnClickListener{
+            onClickSubject.onNext(holder.adapterPosition)
+        }
     }
 
     override fun getItemCount(): Int {

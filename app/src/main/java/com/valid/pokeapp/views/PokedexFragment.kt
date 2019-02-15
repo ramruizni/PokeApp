@@ -2,11 +2,14 @@ package com.valid.pokeapp.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.valid.pokeapp.R
@@ -39,19 +42,18 @@ class PokedexFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this.context!!, 3)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy>0) {
+                if (dy > 0) {
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
 
-                    if (aptoParaCargar) {
-                        if ((visibleItemCount+pastVisibleItems)>=totalItemCount) {
-                            aptoParaCargar = false
-                            viewModel.fetchPokemonList(++offset)
-                        }
+                    if (aptoParaCargar && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                        aptoParaCargar = false
+                        viewModel.fetchPokemonList(++offset)
                     }
                 }
             }
@@ -62,6 +64,10 @@ class PokedexFragment : Fragment() {
             pokedexAdapter.setPokemonList(it)
             aptoParaCargar = true
         })
+
+        pokedexAdapter.onClickSubject.subscribe {
+            findNavController().navigate(R.id.detailFragment, bundleOf("id" to it))
+        }
     }
 
     override fun onDestroy() {
