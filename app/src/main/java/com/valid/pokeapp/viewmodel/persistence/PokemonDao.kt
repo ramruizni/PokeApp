@@ -9,8 +9,8 @@ import androidx.room.Query
 @Dao
 interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(pokemon: Pokemon)
+    fun insert(pokedexEntry: PokedexEntry)
 
-    @Query("SELECT * FROM pokemon")
-    fun getAllPokemon(): LiveData<List<Pokemon>>
+    @Query("SELECT * FROM pokedexEntry")
+    fun getPokemonList(): LiveData<List<PokedexEntry>>
 }

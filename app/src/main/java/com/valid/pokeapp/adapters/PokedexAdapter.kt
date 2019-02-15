@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.valid.pokeapp.R
-import com.valid.pokeapp.viewmodel.persistence.Pokemon
+import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
 import io.reactivex.subjects.PublishSubject
 
 class PokedexAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
 
     private var layoutInflater = LayoutInflater.from(context)
-    private var pokemonList = emptyList<Pokemon>()
+    private var pokemonList = emptyList<PokedexEntry>()
     public val onClickSubject = PublishSubject.create<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
@@ -34,17 +34,17 @@ class PokedexAdapter internal constructor(private val context: Context) : Recycl
         return pokemonList.size
     }
 
-    fun setPokemonList(pokemonList: List<Pokemon>) {
+    fun setPokemonList(pokemonList: List<PokedexEntry>) {
         this.pokemonList = pokemonList
         notifyDataSetChanged()
     }
 
     class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun setData(pokemon: Pokemon, context: Context) {
-            itemView.findViewById<TextView>(R.id.textView).text = pokemon.name
+        fun setData(entry: PokedexEntry, context: Context) {
+            itemView.findViewById<TextView>(R.id.textView).text = entry.name
 
             Glide.with(context)
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png")
+                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry.id}.png")
                 .apply(RequestOptions().placeholder(R.drawable.progress_animation))
                 .into(itemView.findViewById(R.id.imageView))
         }

@@ -8,6 +8,6 @@
               android:label="fragment_pokedex" tools:layout="@layout/fragment_pokedex">
         <action android:id="@+id/action_pokedexFragment_to_detailFragment" app:destination="@id/detailFragment"/>
     </fragment>
-    <fragment android:id="@+id/detailFragment" android:name="com.valid.pokeapp.views.DetailFragment"
-              android:label="fragment_detail" tools:layout="@layout/fragment_detail"/>
+    <fragment android:id="@+id/detailFragment" android:name="com.valid.pokeapp.views.PokemonFragment"
+              android:label="fragment_detail" tools:layout="@layout/fragment_pokemon"/>
 </navigation>

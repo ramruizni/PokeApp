@@ -2,7 +2,6 @@ package com.valid.pokeapp.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -14,13 +13,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.valid.pokeapp.R
 import com.valid.pokeapp.adapters.PokedexAdapter
+import com.valid.pokeapp.viewmodel.PokedexViewModel
 import com.valid.pokeapp.viewmodel.PokemonViewModel
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 class PokedexFragment : Fragment() {
 
     private lateinit var pokedexAdapter: PokedexAdapter
-    private lateinit var viewModel: PokemonViewModel
+    private lateinit var pokedexViewModel: PokedexViewModel
+    private lateinit var pokemonViewModel: PokemonViewModel
 
     var aptoParaCargar = true
     var offset = 0
@@ -35,7 +36,8 @@ class PokedexFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(PokemonViewModel::class.java)
+        pokedexViewModel = ViewModelProviders.of(activity!!).get(PokedexViewModel::class.java)
+        pokemonViewModel = ViewModelProviders.of(activity!!).get(PokemonViewModel::class.java)
 
         pokedexAdapter = PokedexAdapter(this.context!!)
         recyclerView.adapter = pokedexAdapter
@@ -53,26 +55,28 @@ class PokedexFragment : Fragment() {
 
                     if (aptoParaCargar && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
                         aptoParaCargar = false
-                        viewModel.fetchPokemonList(++offset)
+                        pokedexViewModel.fetchPokemonList(++offset)
                     }
                 }
             }
         })
 
-        viewModel.fetchPokemonList(offset)
-        viewModel.pokemonList?.observe(this, Observer {
+        pokedexViewModel.fetchPokemonList(offset)
+        pokedexViewModel.pokemonList?.observe(this, Observer {
             pokedexAdapter.setPokemonList(it)
             aptoParaCargar = true
         })
 
         pokedexAdapter.onClickSubject.subscribe {
-            findNavController().navigate(R.id.detailFragment, bundleOf("id" to it))
+            pokemonViewModel.fetchPokemonData(it)
+            //findNavController().navigate(R.id.detailFragment, bundleOf("id" to it))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.disposeObservables()
+        pokedexViewModel.disposeObservables()
+        pokemonViewModel.disposeObservables()
     }
 
 }
