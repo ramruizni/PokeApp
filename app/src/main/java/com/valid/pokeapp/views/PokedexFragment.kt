@@ -15,6 +15,7 @@ import com.valid.pokeapp.R
 import com.valid.pokeapp.adapters.PokedexAdapter
 import com.valid.pokeapp.viewmodel.PokedexViewModel
 import com.valid.pokeapp.viewmodel.PokemonViewModel
+import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 class PokedexFragment : Fragment() {
@@ -22,6 +23,7 @@ class PokedexFragment : Fragment() {
     private lateinit var pokedexAdapter: PokedexAdapter
     private lateinit var pokedexViewModel: PokedexViewModel
     private lateinit var pokemonViewModel: PokemonViewModel
+    private lateinit var pokedexEntrySelected: PokedexEntry
 
     var aptoParaCargar = true
     var offset = 0
@@ -61,16 +63,24 @@ class PokedexFragment : Fragment() {
             }
         })
 
-        pokedexViewModel.fetchPokemonList(offset)
         pokedexViewModel.pokemonList?.observe(this, Observer {
             pokedexAdapter.setPokemonList(it)
             aptoParaCargar = true
         })
+        pokedexViewModel.fetchPokemonList(offset)
 
         pokedexAdapter.onClickSubject.subscribe {
-            pokemonViewModel.fetchPokemonData(it)
-            //findNavController().navigate(R.id.detailFragment, bundleOf("id" to it))
+            pokemonViewModel.fetchPokemonData(it.id!!)
+            pokedexEntrySelected = it
         }
+        pokemonViewModel.pokemonData.subscribe {
+            var bundle = Bundle()
+            bundle.putInt("id", pokedexEntrySelected.id!!)
+            bundle.putString("name", pokedexEntrySelected.name)
+            bundle.putSerializable("pokemon", it)
+            findNavController().navigate(R.id.detailFragment, bundle)
+        }
+
     }
 
     override fun onDestroy() {

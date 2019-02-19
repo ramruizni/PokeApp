@@ -3,22 +3,20 @@ package com.valid.pokeapp.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import com.valid.pokeapp.viewmodel.entities.PokemonData
 import com.valid.pokeapp.viewmodel.persistence.PokemonDao
 import com.valid.pokeapp.viewmodel.persistence.PokemonDatabase
 import com.valid.pokeapp.viewmodel.repository.PokeApi
-import com.valid.pokeapp.viewmodel.repository.PokeApiPokedexResponse
-import com.valid.pokeapp.viewmodel.repository.PokeApiPokemonDataResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class PokemonViewModel(application: Application) : AndroidViewModel(application) {
 
     private var pokemonDB: PokemonDatabase? = PokemonDatabase.getDatabase(getApplication())
     private var pokemonDao: PokemonDao?
-    var pokemonData: MutableLiveData<PokemonData>? = null
+    var pokemonData = PublishSubject.create<PokemonData>()
 
     private val pokeApi by lazy {
         PokeApi.create()
@@ -38,7 +36,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
 
     private fun onFetchSuccess(response: PokemonData) {
         Log.e("AZAZAOMGsuccess", response.toString())
-        pokemonData?.value = response
+        pokemonData.onNext(response)
     }
 
     private fun onFetchError(error: Throwable) {

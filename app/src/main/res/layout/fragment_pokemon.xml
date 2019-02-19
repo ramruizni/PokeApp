@@ -6,106 +6,135 @@
              tools:context=".views.PokemonFragment">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
-        <TextView
-                android:id="@+id/tvName"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="Bulbasaur"/>
+                  android:orientation="vertical">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:orientation="horizontal">
+                      android:orientation="horizontal"
+        android:gravity="center_vertical">
             <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="200dp" android:layout_height="200dp"/>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="200dp"
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:orientation="vertical">
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorHp">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="HP:"
-                            android:textAlignment="center"/>
+                            android:text="@string/hp"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvHp"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="45"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:textStyle="bold"
+                            android:paddingRight="10dp"
+                            android:textSize="16sp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorAttack">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="Attack:"
-                            android:textAlignment="center"/>
+                            android:text="@string/attack"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvAttack"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="49"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:paddingRight="10dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorDefense">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="Defense:"
-                            android:textAlignment="center"/>
+                            android:text="@string/defense"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvDefense"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="49"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:paddingRight="10dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorSpAtk">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="Sp.Atk:"
-                            android:textAlignment="center"/>
+                            android:text="@string/sp_atk"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvSpAtk"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="65"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:paddingRight="10dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorSpDef">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="Sp.Def:"
-                            android:textAlignment="center"/>
+                            android:text="@string/sp_def"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvSpDef"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="65"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:paddingRight="10dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                              android:orientation="horizontal">
+                              android:orientation="horizontal"
+                              android:background="@color/colorSpeed">
                     <TextView
                             android:layout_width="80dp" android:layout_height="wrap_content"
-                            android:text="Speed:"
-                            android:textAlignment="center"/>
+                            android:text="@string/speed"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                     <TextView
                             android:id="@+id/tvSpeed"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:text="45"
                             android:layout_gravity="end"
-                            android:textAlignment="viewEnd"/>
+                            android:textAlignment="viewEnd"
+                            android:paddingRight="10dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Attacks:"
-        android:textAlignment="center"/>
-        <ScrollView
-                android:id="@+id/svAttacks"
-                android:layout_width="match_parent" android:layout_height="match_parent" />
+        <TextView android:layout_width="match_parent" android:layout_height="40dp"
+                  android:text="@string/attacks"
+                  android:textAlignment="center"
+                  android:gravity="center"
+        android:textSize="16sp"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAttacks"
+                android:layout_width="match_parent" android:layout_height="match_parent"/>
 
     </LinearLayout>
 </FrameLayout>

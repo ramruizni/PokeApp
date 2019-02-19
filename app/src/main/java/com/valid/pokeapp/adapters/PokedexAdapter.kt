@@ -16,7 +16,7 @@ class PokedexAdapter internal constructor(private val context: Context) : Recycl
 
     private var layoutInflater = LayoutInflater.from(context)
     private var pokemonList = emptyList<PokedexEntry>()
-    public val onClickSubject = PublishSubject.create<Int>()
+    val onClickSubject = PublishSubject.create<PokedexEntry>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val itemView = layoutInflater.inflate(R.layout.item_pokemon, parent, false)
@@ -24,9 +24,9 @@ class PokedexAdapter internal constructor(private val context: Context) : Recycl
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        holder.setData(pokemonList.get(position), context)
+        holder.setData(pokemonList[position], context)
         holder.itemView.setOnClickListener{
-            onClickSubject.onNext(holder.adapterPosition)
+            onClickSubject.onNext(pokemonList[position])
         }
     }
 
