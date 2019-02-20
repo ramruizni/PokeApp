@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +16,8 @@ import com.valid.pokeapp.adapters.PokedexAdapter
 import com.valid.pokeapp.viewmodel.PokedexViewModel
 import com.valid.pokeapp.viewmodel.PokemonViewModel
 import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_pokedex.*
 
 class PokedexFragment : Fragment() {
@@ -24,8 +26,9 @@ class PokedexFragment : Fragment() {
     private lateinit var pokedexViewModel: PokedexViewModel
     private lateinit var pokemonViewModel: PokemonViewModel
     private lateinit var pokedexEntrySelected: PokedexEntry
+    private var disposable = CompositeDisposable()
 
-    var aptoParaCargar = true
+    var canReload = true
     var offset = 0
 
     override fun onCreateView(
@@ -38,6 +41,9 @@ class PokedexFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.title = "PokeApp"
+
         pokedexViewModel = ViewModelProviders.of(activity!!).get(PokedexViewModel::class.java)
         pokemonViewModel = ViewModelProviders.of(activity!!).get(PokemonViewModel::class.java)
 
@@ -51,42 +57,45 @@ class PokedexFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
-
-                    if (aptoParaCargar && (visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                        aptoParaCargar = false
+                    val pastItems = layoutManager.findFirstVisibleItemPosition()
+                    if (canReload && (layoutManager.childCount + pastItems) >= layoutManager.itemCount) {
+                        canReload = false
                         pokedexViewModel.fetchPokemonList(++offset)
                     }
                 }
             }
         })
 
-        pokedexViewModel.pokemonList?.observe(this, Observer {
+        pokedexViewModel.pokemonList.observe(this, Observer {
             pokedexAdapter.setPokemonList(it)
-            aptoParaCargar = true
+            canReload = true
         })
         pokedexViewModel.fetchPokemonList(offset)
 
-        pokedexAdapter.onClickSubject.subscribe {
+        disposable.add(pokedexAdapter.onClickSubject.subscribe {
+            activity?.progressBar?.visibility = View.VISIBLE
             pokemonViewModel.fetchPokemonData(it.id!!)
             pokedexEntrySelected = it
-        }
-        pokemonViewModel.pokemonData.subscribe {
-            var bundle = Bundle()
+        })
+
+        disposable.add(pokemonViewModel.pokemonData.subscribe {
+            val bundle = Bundle()
             bundle.putInt("id", pokedexEntrySelected.id!!)
             bundle.putString("name", pokedexEntrySelected.name)
             bundle.putSerializable("pokemon", it)
-            findNavController().navigate(R.id.detailFragment, bundle)
-        }
 
+            activity?.progressBar?.visibility = View.GONE
+
+            if (findNavController().currentDestination?.id == R.id.pokedexFragment) {
+                findNavController().navigate(R.id.toPokemon, bundle)
+            }
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         pokedexViewModel.disposeObservables()
         pokemonViewModel.disposeObservables()
+        disposable.dispose()
     }
-
 }

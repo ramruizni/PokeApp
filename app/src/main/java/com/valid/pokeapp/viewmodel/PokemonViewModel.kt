@@ -8,6 +8,7 @@ import com.valid.pokeapp.viewmodel.persistence.PokemonDao
 import com.valid.pokeapp.viewmodel.persistence.PokemonDatabase
 import com.valid.pokeapp.viewmodel.repository.PokeApi
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -15,23 +16,19 @@ import io.reactivex.subjects.PublishSubject
 class PokemonViewModel(application: Application) : AndroidViewModel(application) {
 
     private var pokemonDB: PokemonDatabase? = PokemonDatabase.getDatabase(getApplication())
-    private var pokemonDao: PokemonDao?
+    private var pokemonDao = pokemonDB!!.pokemonDao()
     var pokemonData = PublishSubject.create<PokemonData>()
+    private var disposable = CompositeDisposable()
 
     private val pokeApi by lazy {
         PokeApi.create()
     }
-    private var disposable: Disposable? = null
-
-    init {
-        pokemonDao = pokemonDB!!.pokemonDao()
-    }
 
     fun fetchPokemonData(id: Int) {
-        disposable = pokeApi.getPokemonData(id)
+        disposable.add(pokeApi.getPokemonData(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::onFetchSuccess, this::onFetchError)
+            .subscribe(this::onFetchSuccess, this::onFetchError))
     }
 
     private fun onFetchSuccess(response: PokemonData) {
@@ -45,7 +42,7 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun disposeObservables() {
-        disposable?.dispose()
+        disposable.dispose()
     }
 
 }

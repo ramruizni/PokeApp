@@ -1,10 +1,10 @@
 package com.valid.pokeapp.views
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -28,14 +28,13 @@ class PokemonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //tvName.text = arguments?.getString("name")
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.title = arguments?.getString("name")
 
         Glide.with(this.context!!)
             .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${arguments?.getInt("id")}.png")
             .apply(RequestOptions().placeholder(R.drawable.progress_animation))
             .into(imageView.findViewById(R.id.imageView))
-
 
         val pokemon = arguments?.getSerializable("pokemon") as PokemonData
         val stats = pokemon.stats
@@ -51,8 +50,8 @@ class PokemonFragment : Fragment() {
         rvAttacks.adapter = movesAdapter
         rvAttacks.layoutManager = GridLayoutManager(this.context!!, 1)
 
-        movesAdapter.setMovesList(pokemon.moves.filter { it.versionGroupDetails[0].levelLearnedAt != 0 }.sortedBy { it.versionGroupDetails[0].levelLearnedAt })
-
+        movesAdapter.setMovesList(pokemon.moves
+            .filter { it.versionGroupDetails[0].levelLearnedAt != 0 }
+            .sortedBy { it.versionGroupDetails[0].levelLearnedAt })
     }
-
 }
