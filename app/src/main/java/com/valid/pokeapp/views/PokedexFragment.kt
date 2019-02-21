@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,12 +18,13 @@ import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_pokedex.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokedexFragment : Fragment() {
 
     private lateinit var pokedexAdapter: PokedexAdapter
-    private lateinit var pokedexViewModel: PokedexViewModel
-    private lateinit var pokemonViewModel: PokemonViewModel
+    private val pokedexViewModel by viewModel<PokedexViewModel>()
+    private val pokemonViewModel by viewModel<PokemonViewModel>()
     private lateinit var pokedexEntrySelected: PokedexEntry
     private var disposable = CompositeDisposable()
 
@@ -43,9 +43,6 @@ class PokedexFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (activity as AppCompatActivity).supportActionBar?.title = "PokeApp"
-
-        pokedexViewModel = ViewModelProviders.of(activity!!).get(PokedexViewModel::class.java)
-        pokemonViewModel = ViewModelProviders.of(activity!!).get(PokemonViewModel::class.java)
 
         pokedexAdapter = PokedexAdapter(this.context!!)
         recyclerView.adapter = pokedexAdapter
@@ -70,7 +67,6 @@ class PokedexFragment : Fragment() {
             pokedexAdapter.setPokemonList(it)
             canReload = true
         })
-        pokedexViewModel.fetchPokemonList(offset)
 
         disposable.add(pokedexAdapter.onClickSubject.subscribe {
             activity?.progressBar?.visibility = View.VISIBLE
@@ -90,6 +86,8 @@ class PokedexFragment : Fragment() {
                 findNavController().navigate(R.id.toPokemon, bundle)
             }
         })
+
+        pokedexViewModel.fetchPokemonList(offset)
     }
 
     override fun onDestroy() {

@@ -10,7 +10,7 @@ import com.valid.pokeapp.R
 import com.valid.pokeapp.utils.ViewModelUtils
 import com.valid.pokeapp.viewmodel.entities.Move
 
-class MovesAdapter internal constructor(private val context: Context) :
+class MovesAdapter internal constructor(context: Context) :
     RecyclerView.Adapter<MovesAdapter.MovesViewHolder>() {
 
     private var layoutInflater = LayoutInflater.from(context)
@@ -22,7 +22,7 @@ class MovesAdapter internal constructor(private val context: Context) :
     }
 
     override fun onBindViewHolder(holder: MovesViewHolder, position: Int) {
-        holder.setData(movesList[position], context)
+        holder.setData(movesList[position])
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +35,7 @@ class MovesAdapter internal constructor(private val context: Context) :
     }
 
     class MovesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun setData(move: Move, context: Context) {
+        fun setData(move: Move) {
             itemView.findViewById<TextView>(R.id.tvLevel).text = move.versionGroupDetails[0].levelLearnedAt.toString()
             itemView.findViewById<TextView>(R.id.tvName).text = ViewModelUtils.formatName(move.move.name)
         }

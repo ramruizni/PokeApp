@@ -44,7 +44,7 @@ class PokedexViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun onFetchError(error: Throwable) {
-        Log.e("error", "omgfg")
+        Log.e("error", error.message)
         //fetchFail.onNext(null)
     }
 
