@@ -1,6 +1,7 @@
 package com.valid.pokeapp.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.valid.pokeapp.R
 import com.valid.pokeapp.adapters.PokedexAdapter
+import com.valid.pokeapp.utils.UXUtils
 import com.valid.pokeapp.viewmodel.PokedexViewModel
 import com.valid.pokeapp.viewmodel.PokemonViewModel
 import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
+import com.valid.pokeapp.viewmodel.persistence.PokemonData
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_pokedex.*
@@ -74,21 +77,25 @@ class PokedexFragment : Fragment() {
             pokedexEntrySelected = it
         })
 
-        disposable.add(pokemonViewModel.pokemonData.subscribe {
+        disposable.add(pokemonViewModel.pokemonData.subscribe(
+            {
+            activity?.progressBar?.visibility = View.GONE
+
             val bundle = Bundle()
             bundle.putInt("id", pokedexEntrySelected.id!!)
             bundle.putString("name", pokedexEntrySelected.name)
             bundle.putSerializable("pokemon", it)
 
-            activity?.progressBar?.visibility = View.GONE
-
             if (findNavController().currentDestination?.id == R.id.pokedexFragment) {
                 findNavController().navigate(R.id.toPokemon, bundle)
             }
-        })
-
-        pokedexViewModel.fetchPokemonList(offset)
+            }, {
+                activity?.progressBar?.visibility = View.GONE
+                UXUtils.showAlertDialog(context, "title", "message", "OK")
+            }
+        ))
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

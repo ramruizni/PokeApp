@@ -7,6 +7,7 @@ import com.valid.pokeapp.viewmodel.entities.PokemonData
 import com.valid.pokeapp.viewmodel.persistence.PokemonDao
 import com.valid.pokeapp.viewmodel.persistence.PokemonDatabase
 import com.valid.pokeapp.viewmodel.repository.PokeApi
+import io.reactivex.Notification
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,13 +33,12 @@ class PokemonViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun onFetchSuccess(response: PokemonData) {
-        Log.e("AZAZAOMGsuccess", response.toString())
         pokemonData.onNext(response)
     }
 
     private fun onFetchError(error: Throwable) {
         Log.e("AZAZAOMGerror", error.message)
-        // nothing yet
+        pokemonData.onError(error)
     }
 
     fun disposeObservables() {
