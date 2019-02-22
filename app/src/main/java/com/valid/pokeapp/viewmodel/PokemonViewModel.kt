@@ -3,6 +3,7 @@ package com.valid.pokeapp.viewmodel
 import androidx.lifecycle.ViewModel
 import com.valid.pokeapp.viewmodel.entities.PokemonData
 import com.valid.pokeapp.viewmodel.repository.PokeApi
+import io.reactivex.Notification
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +29,8 @@ class PokemonViewModel(
     }
 
     private fun onFetchError(error: Throwable) {
-        // nothing yet
+        Log.e("AZAZAOMGerror", error.message)
+        pokemonData.onError(error)
     }
 
     fun disposeObservables() {

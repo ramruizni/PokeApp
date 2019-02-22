@@ -14,9 +14,6 @@ public class PokemonData implements Serializable {
     @SerializedName("moves")
     @Expose
     private List<Move> moves = null;
-    @SerializedName("sprites")
-    @Expose
-    private Sprites sprites;
     @SerializedName("stats")
     @Expose
     private List<Stat> stats = null;
@@ -30,10 +27,6 @@ public class PokemonData implements Serializable {
 
     public List<Move> getMoves() {
         return moves;
-    }
-
-    public Sprites getSprites() {
-        return sprites;
     }
 
     public List<Stat> getStats() {
