@@ -13,10 +13,11 @@ import com.valid.pokeapp.R
 import com.valid.pokeapp.adapters.MovesAdapter
 import com.valid.pokeapp.viewmodel.entities.PokemonData
 import kotlinx.android.synthetic.main.fragment_pokemon.*
+import org.koin.android.ext.android.get
 
 class PokemonFragment : Fragment() {
 
-    private lateinit var movesAdapter: MovesAdapter
+    private var movesAdapter = get<MovesAdapter>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +47,6 @@ class PokemonFragment : Fragment() {
         tvSpDef.text = stats[4].baseStat.toString()
         tvSpeed.text = stats[5].baseStat.toString()
 
-        movesAdapter = MovesAdapter(this.context!!)
         rvAttacks.adapter = movesAdapter
         rvAttacks.layoutManager = GridLayoutManager(this.context!!, 1)
 

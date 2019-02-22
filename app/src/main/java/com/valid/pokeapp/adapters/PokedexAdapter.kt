@@ -12,7 +12,7 @@ import com.valid.pokeapp.R
 import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
 import io.reactivex.subjects.PublishSubject
 
-class PokedexAdapter internal constructor(private val context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
+class PokedexAdapter internal constructor(val context: Context) : RecyclerView.Adapter<PokedexAdapter.PokemonViewHolder>() {
 
     private var layoutInflater = LayoutInflater.from(context)
     private var pokemonList = emptyList<PokedexEntry>()

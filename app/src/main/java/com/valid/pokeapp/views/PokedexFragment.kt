@@ -18,15 +18,17 @@ import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_pokedex.*
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokedexFragment : Fragment() {
 
-    private lateinit var pokedexAdapter: PokedexAdapter
+    private var pokedexAdapter = get<PokedexAdapter>()
     private val pokedexViewModel by viewModel<PokedexViewModel>()
     private val pokemonViewModel by viewModel<PokemonViewModel>()
     private lateinit var pokedexEntrySelected: PokedexEntry
-    private var disposable = CompositeDisposable()
+    private val disposable: CompositeDisposable by inject()
 
     var canReload = true
     var offset = 0
