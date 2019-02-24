@@ -1,10 +1,12 @@
 package com.valid.pokeapp.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.valid.pokeapp.R
 import com.valid.pokeapp.utils.ViewModelUtils
@@ -22,7 +24,7 @@ class MovesAdapter internal constructor(context: Context) :
     }
 
     override fun onBindViewHolder(holder: MovesViewHolder, position: Int) {
-        holder.setData(movesList[position])
+        holder.setData(movesList[position], position)
     }
 
     override fun getItemCount(): Int {
@@ -35,9 +37,14 @@ class MovesAdapter internal constructor(context: Context) :
     }
 
     class MovesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun setData(move: Move) {
+        fun setData(move: Move, pos: Int) {
             itemView.findViewById<TextView>(R.id.tvLevel).text = move.versionGroupDetails[0].levelLearnedAt.toString()
             itemView.findViewById<TextView>(R.id.tvName).text = ViewModelUtils.formatName(move.move.name)
+            if (pos % 2 == 0) {
+                itemView.setBackgroundColor(Color.WHITE)
+            } else {
+                itemView.setBackgroundColor(Color.LTGRAY)
+            }
         }
     }
 }

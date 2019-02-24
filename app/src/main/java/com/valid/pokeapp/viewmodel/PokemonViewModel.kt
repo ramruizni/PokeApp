@@ -1,5 +1,6 @@
 package com.valid.pokeapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.valid.pokeapp.viewmodel.entities.PokemonData
 import com.valid.pokeapp.viewmodel.repository.PokeApi

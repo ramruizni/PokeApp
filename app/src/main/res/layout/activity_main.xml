@@ -15,10 +15,14 @@
             app:navGraph="@navigation/navigation_graph"
             app:defaultNavHost="true"/>
 
-    <ProgressBar
+    <RelativeLayout
             android:id="@+id/progressBar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
+        <ProgressBar
+                android:layout_width="60dp"
+                android:layout_height="60dp"/>
+    </RelativeLayout>
 </FrameLayout>
