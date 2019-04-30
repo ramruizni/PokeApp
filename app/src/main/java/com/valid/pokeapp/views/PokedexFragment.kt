@@ -1,7 +1,6 @@
 package com.valid.pokeapp.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.valid.pokeapp.utils.UXUtils
 import com.valid.pokeapp.viewmodel.PokedexViewModel
 import com.valid.pokeapp.viewmodel.PokemonViewModel
 import com.valid.pokeapp.viewmodel.persistence.PokedexEntry
-import com.valid.pokeapp.viewmodel.persistence.PokemonData
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_pokedex.*
@@ -96,6 +94,8 @@ class PokedexFragment : Fragment() {
                 UXUtils.showAlertDialog(context, "title", "message", "OK")
             }
         ))
+
+        pokedexViewModel.fetchPokemonList(offset)
     }
 
 
